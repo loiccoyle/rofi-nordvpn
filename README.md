@@ -1,4 +1,7 @@
 # rofi-nordvpn
+<p align="center">
+  <img src="https://i.imgur.com/Y5kDbVf.png">
+</p>
 
 <p align="center">
   <a href="./LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-blue.svg"></a>

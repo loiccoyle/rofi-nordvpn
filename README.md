@@ -1,11 +1,19 @@
 # rofi-nordvpn
 
+<p align="center">
+  <a href="./LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
+</p>
+
 Dynamic menu interface for `nordvpn`.
 
 # Dependencies:
 
  * `rofi`
  * `nordvpn`
+
+# Installation:
+
+Just git clone this repo and place the `rofi-nordvpn` file somewhere on your `PATH` and make sure it is executable `chmod +x rofi-nordvpn`.
 
 # Configuration:
 

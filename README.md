@@ -5,6 +5,7 @@
 
 <p align="center">
   <a href="./LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
+  <a href="https://aur.archlinux.org/packages/rofi-nordvpn-git/"><img src="https://img.shields.io/aur/version/rofi-nordvpn-git"></a>
 </p>
 
 Dynamic menu interface for `nordvpn`.
@@ -17,6 +18,11 @@ Dynamic menu interface for `nordvpn`.
 # Installation:
 
 Just git clone this repo and place the `rofi-nordvpn` file somewhere on your `PATH` and make sure it is executable `chmod +x rofi-nordvpn`.
+
+For Arch Linux (and derivatives):
+```sh
+yay -S rofi-nordvpn-git
+```
 
 # Configuration:
 

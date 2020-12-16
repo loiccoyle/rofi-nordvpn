@@ -13,7 +13,7 @@ set -e
 
 function echoexit() {
     # Print to stderr and exit
-    echo "$@" 1>&2
+    printf "$@" 1>&2
     exit 1
 }
 
@@ -27,7 +27,7 @@ function menu() {
 }
 
 function usage() {
-    echo "Dynamic menu interface for nordvpn.
+    printf "Dynamic menu interface for nordvpn.
 
 Usage:
   rofi-nordvpn [-h] [-s LABEL]
@@ -40,28 +40,28 @@ function init_menu() {
     # Initial menu.
 
     local choices="connect\ndisconnect\ninfo"
-    echo -e "$choices" | menu
+    printf "$choices" | menu
 }
 
 function connect() {
     # nordvpn connect options.
 
     local choices="default\ncountries\ncities\np2p"
-    echo -e "$choices" | menu
+    printf "$choices" | menu
 }
 
 function countries() {
     # Country selection.
 
     local choices="$(nordvpn countries | tr -d '\r,-' | tr -s "[:blank:]" "\n" | sed '/^\s*$/d' | sort)"
-    echo -e "$choices" | menu
+    printf "$choices" | menu
 }
 
 function cities() {
     # City selection.
 
     local choices="$(nordvpn cities $1 | tr -d '\r,-' | tr -s "[:blank:]" "\n" | sed '/^\s*$/d' | sort)"
-    echo -e "$choices" | menu
+    printf "$choices" | menu
 }
 
 function disconnect() {
@@ -75,9 +75,9 @@ function status() {
 
     local status="$(nordvpn status | tr -d '\r -')"
     if [[ "$status" != *"Connected"* ]]; then
-        echo "$STATUS_LABEL Off"
+        printf "$STATUS_LABEL Off"
     else
-        echo "$STATUS_LABEL $(echo "$status" | sed -n "4p" | cut -d ":" -f 2)"
+        printf "$STATUS_LABEL $(printf "$status" | sed -n "4p" | cut -d ":" -f 2)"
     fi
 }
 
@@ -85,7 +85,7 @@ function info() {
     # Show vpn info.
 
     local choices="$(nordvpn status | tr -d '\r-' | sed 's/^ *//')"
-    echo -e "$choices" | menu
+    printf "$choices" | menu
 }
 
 # Parse options to the `rofi-nordvpn` command
@@ -101,7 +101,7 @@ while getopts ":hs" opt; do
             exit 0
             ;;
         \? )
-            echo "Invalid Option: -$OPTARG" 1>&2
+            printf "Invalid Option: -$OPTARG" 1>&2
             usage
             exit 1
             ;;

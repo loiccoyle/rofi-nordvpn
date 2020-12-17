@@ -77,7 +77,7 @@ function status() {
     if [[ "$status" != *"Connected"* ]]; then
         printf "$STATUS_LABEL Off"
     else
-        printf "$STATUS_LABEL $(printf "$status" | sed -n "4p" | cut -d ":" -f 2)"
+        printf "$STATUS_LABEL $(printf "$status" | grep "City" | cut -d ":" -f 2)"
     fi
 }
 

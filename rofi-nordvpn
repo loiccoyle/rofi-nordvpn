@@ -6,27 +6,25 @@
 # |_|  \___/|_| |_|     |_| |_|\___/|_|  \__,_| \_/ | .__/|_| |_|
 #                                                   |_|
 
-# any failure in piped commands aborts pipe
-set -o pipefail
 # exit when any command fails
 set -e
 
-function echoexit() {
+echoexit() {
     # Print to stderr and exit
-    printf "$@" 1>&2
+    printf "%s\n" "$@" 1>&2
     exit 1
 }
 
 # Checking dependencies:
 whereis nordvpn > /dev/null || echoexit "'nordvpn' not found."
 
-function menu() {
+menu() {
     # Menu command, should read from stdin and write to stdout.
 
     rofi -dmenu -p "Select"
 }
 
-function usage() {
+usage() {
     printf "Dynamic menu interface for nordvpn.
 
 Usage:
@@ -36,56 +34,62 @@ Usage:
       LABEL                            Prefix label for the status information."
 }
 
-function init_menu() {
+init_menu() {
     # Initial menu.
 
-    local choices="connect\ndisconnect\ninfo"
-    printf "$choices" | menu
+    local choices
+    choices="connect\ndisconnect\ninfo"
+    printf "%b" "$choices" | menu
 }
 
-function connect() {
+connect() {
     # nordvpn connect options.
 
-    local choices="default\ncountries\ncities\np2p"
-    printf "$choices" | menu
+    local choices
+    choices="default\ncountries\ncities\np2p"
+    printf "%b" "$choices" | menu
 }
 
-function countries() {
+countries() {
     # Country selection.
 
-    local choices="$(nordvpn countries | tr -d '\r,-' | tr -s "[:blank:]" "\n" | sed '/^\s*$/d' | sort)"
-    printf "$choices" | menu
+    local choices
+    choices="$(nordvpn countries | tr -d '\r,-' | tr -s "[:blank:]" "\n" | sed '/^\s*$/d' | sort)"
+    printf "%s" "$choices" | menu
 }
 
-function cities() {
+cities() {
     # City selection.
 
-    local choices="$(nordvpn cities $1 | tr -d '\r,-' | tr -s "[:blank:]" "\n" | sed '/^\s*$/d' | sort)"
-    printf "$choices" | menu
+    local choices
+    choices="$(nordvpn cities "$1" | tr -d '\r,-' | tr -s "[:blank:]" "\n" | sed '/^\s*$/d' | sort)"
+    printf "%s" "$choices" | menu
 }
 
-function disconnect() {
+disconnect() {
     # disconnect
 
     nordvpn disconnect
 }
 
-function status() {
+status() {
     # Echo the status.
 
-    local status="$(nordvpn status | tr -d '\r -')"
-    if [[ "$status" != *"Connected"* ]]; then
-        printf "$STATUS_LABEL Off"
+    local status
+    status="$(nordvpn status | tr -d '\r -')"
+    if [ -n "${status##*Connected*}" ]; then
+        printf "%s Off" "$STATUS_LABEL"
     else
-        printf "$STATUS_LABEL $(printf "$status" | grep "City" | cut -d ":" -f 2)"
+        printf "%s %s" "$STATUS_LABEL" "$(printf "%s" "$status" | grep "City" | cut -d ":" -f 2)"
     fi
 }
 
-function info() {
+info() {
     # Show vpn info.
 
-    local choices="$(nordvpn status | tr -d '\r-' | sed 's/^ *//')"
-    printf "$choices" | menu
+    local choices
+    choices="$(nordvpn status | tr -d '\r-' | sed 's/^ *//')"
+    printf "%s" "$choices" | menu
 }
 
 # Parse options to the `rofi-nordvpn` command
@@ -101,7 +105,7 @@ while getopts ":hs" opt; do
             exit 0
             ;;
         \? )
-            printf "Invalid Option: -$OPTARG" 1>&2
+            printf "Invalid Option: -%s\n" "$OPTARG" 1>&2
             usage
             exit 1
             ;;
@@ -121,7 +125,7 @@ case "$(init_menu)" in
             "cities")
                 country="$(countries)"
                 [ -n "$country" ] && city="$(cities "$country")"
-                [ -n $city ] && nordvpn connect "$country" "$city"
+                [ -n "$city" ] && nordvpn connect "$country" "$city"
                 ;;
             "p2p")
                 nordvpn connect p2p

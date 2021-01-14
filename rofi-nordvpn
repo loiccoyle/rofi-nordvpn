@@ -38,7 +38,7 @@ init_menu() {
     # Initial menu.
 
     local choices
-    choices="connect\ndisconnect\ninfo"
+    choices="connect\ndisconnect\nstatus\nsettings"
     printf "%b" "$choices" | menu
 }
 
@@ -84,11 +84,19 @@ status() {
     fi
 }
 
-info() {
-    # Show vpn info.
+vpn_status() {
+    # Show vpn status.
 
     local choices
     choices="$(nordvpn status | tr -d '\r-' | sed 's/^ *//')"
+    printf "%s" "$choices" | menu
+}
+
+settings() {
+    # Show vpn settings.
+
+    local choices
+    choices="$(nordvpn settings | tr -d '\r-' | sed 's/^ *//')"
     printf "%s" "$choices" | menu
 }
 
@@ -140,8 +148,11 @@ case "$(init_menu)" in
     "disconnect")
         disconnect
         ;;
-    "info")
-        info
+    "status")
+        vpn_status
+        ;;
+    "settings")
+        settings
         ;;
     *)
         ;;

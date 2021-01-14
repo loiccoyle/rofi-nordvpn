@@ -46,7 +46,7 @@ connect() {
     # nordvpn connect options.
 
     local choices
-    choices="default\ncountries\ncities\np2p"
+    choices="default\ncountries\ncities\np2p\nonion"
     printf "%b" "$choices" | menu
 }
 
@@ -129,6 +129,9 @@ case "$(init_menu)" in
                 ;;
             "p2p")
                 nordvpn connect p2p
+                ;;
+            "onion")
+                nordvpn connect onion_over_vpn
                 ;;
             *)
                 ;;

@@ -31,7 +31,7 @@ Usage:
   rofi-nordvpn [-h] [-s LABEL]
     -h                                 Display this help message.
     -s                                 Display current vpn status, useful for status bars.
-      LABEL                            Prefix label for the status information."
+"
 }
 
 init_menu() {
@@ -78,9 +78,9 @@ status() {
     local status
     status="$(nordvpn status | tr -d '\r -')"
     if [ -n "${status##*Connected*}" ]; then
-        printf "%s Off" "$STATUS_LABEL"
+        printf "Off"
     else
-        printf "%s %s" "$STATUS_LABEL" "$(printf "%s" "$status" | grep "City" | cut -d ":" -f 2)"
+        printf "%s" "$(printf "%s" "$status" | grep "City" | cut -d ":" -f 2)"
     fi
 }
 
@@ -108,7 +108,6 @@ while getopts ":hs" opt; do
             exit 0
             ;;
         s )
-            STATUS_LABEL="$2"
             status
             exit 0
             ;;

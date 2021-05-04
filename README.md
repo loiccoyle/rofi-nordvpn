@@ -30,11 +30,11 @@ There isn't much to configure. If you are not a `rofi` user don't fret you simpl
 
 # Status bars:
 
-For easy embeding into your chosen status bar, consider using the `-s` flag which outputs the current vpn status. When using the `-s` flag you can specify a "LABEL" which will prefix the status message.
+For easy embeding into your chosen status bar, consider using the `-s` flag which outputs the current vpn status.
 
 ```sh
-$ rofi-nordvpn -s 👻
-👻 Paris
+$ rofi-nordvpn -s
+Paris
 ```
 
 For polybar here is my module (using the [Siji](https://github.com/stark/siji) font):
@@ -42,7 +42,8 @@ For polybar here is my module (using the [Siji](https://github.com/stark/siji) f
 ```ini
 [module/vpn]
 type = custom/script
-exec = rofi-nordvpn -s 
+label =  %output%
+exec = rofi-nordvpn -s
 interval = 10
 click-left = rofi-nordvpn &
 ```

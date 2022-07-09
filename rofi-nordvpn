@@ -16,7 +16,7 @@ echoexit() {
 }
 
 # Checking dependencies:
-whereis nordvpn > /dev/null || echoexit "'nordvpn' not found."
+whereis nordvpn >/dev/null || echoexit "'nordvpn' not found."
 
 menu() {
     # Menu command, should read from stdin and write to stdout.
@@ -54,7 +54,7 @@ countries() {
     # Country selection.
 
     local choices
-    choices="$(nordvpn countries | tr -d '\r,-' | tr -s "[:blank:]" "\n" | sed '/^\s*$/d' | sort)"
+    choices="$(nordvpn countries | tr -d '\r' | sed '/^-  -/d' | sed 's/^-  //g' | tr -s "[:blank:]" "\n" | sort)"
     printf "%s" "$choices" | menu
 }
 
@@ -62,7 +62,7 @@ cities() {
     # City selection.
 
     local choices
-    choices="$(nordvpn cities "$1" | tr -d '\r,-' | tr -s "[:blank:]" "\n" | sed '/^\s*$/d' | sort)"
+    choices="$(nordvpn cities "$1" | tr -d '\r' | sed '/-  -  -  /d' | sed 's/^-  //g' | tr -s "[:blank:]" "\n" | sort)"
     printf "%s" "$choices" | menu
 }
 
@@ -103,56 +103,56 @@ settings() {
 # Parse options to the `rofi-nordvpn` command
 while getopts ":hs" opt; do
     case ${opt} in
-        h )
-            usage
-            exit 0
-            ;;
-        s )
-            status
-            exit 0
-            ;;
-        \? )
-            printf "Invalid Option: -%s\n" "$OPTARG" 1>&2
-            usage
-            exit 1
-            ;;
+    h)
+        usage
+        exit 0
+        ;;
+    s)
+        status
+        exit 0
+        ;;
+    \?)
+        printf "Invalid Option: -%s\n" "$OPTARG" 1>&2
+        usage
+        exit 1
+        ;;
     esac
 done
 
 case "$(init_menu)" in
-    "connect")
-        case $(connect) in
-            "default")
-                nordvpn connect
-                ;;
-            "countries")
-                country="$(countries)"
-                [ -n "$country" ] && nordvpn connect "$country"
-                ;;
-            "cities")
-                country="$(countries)"
-                [ -n "$country" ] && city="$(cities "$country")"
-                [ -n "$city" ] && nordvpn connect "$country" "$city"
-                ;;
-            "p2p")
-                nordvpn connect p2p
-                ;;
-            "onion")
-                nordvpn connect onion_over_vpn
-                ;;
-            *)
-                ;;
-        esac
+"connect")
+    case $(connect) in
+    "default")
+        nordvpn connect
         ;;
-    "disconnect")
-        disconnect
+    "countries")
+        country="$(countries)"
+        [ -n "$country" ] && nordvpn connect "$country"
         ;;
-    "status")
-        vpn_status
+    "cities")
+        country="$(countries)"
+        [ -n "$country" ] && city="$(cities "$country")"
+        [ -n "$city" ] && nordvpn connect "$country" "$city"
         ;;
-    "settings")
-        settings
+    "p2p")
+        nordvpn connect p2p
         ;;
-    *)
+    "onion")
+        nordvpn connect onion_over_vpn
         ;;
+    *) ;;
+
+    esac
+    ;;
+"disconnect")
+    disconnect
+    ;;
+"status")
+    vpn_status
+    ;;
+"settings")
+    settings
+    ;;
+*) ;;
+
 esac

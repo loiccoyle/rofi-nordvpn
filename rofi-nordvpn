@@ -36,7 +36,6 @@ Usage:
 
 init_menu() {
     # Initial menu.
-
     local choices
     choices="connect\ndisconnect\nstatus\nsettings"
     printf "%b" "$choices" | menu
@@ -44,7 +43,6 @@ init_menu() {
 
 connect() {
     # nordvpn connect options.
-
     local choices
     choices="default\ncountries\ncities\np2p\nonion"
     printf "%b" "$choices" | menu
@@ -52,29 +50,23 @@ connect() {
 
 countries() {
     # Country selection.
-
-    local choices
-    choices="$(nordvpn countries | tr -d '\r' | sed '/^-  -/d' | sed 's/^-  //g' | tr -s "[:blank:]" "\n" | sort)"
-    printf "%s" "$choices" | menu
+    nordvpn connect --generate-bash-completion | menu
 }
 
 cities() {
     # City selection.
-
-    local choices
-    choices="$(nordvpn cities "$1" | tr -d '\r' | sed '/-  -  -  /d' | sed 's/^-  //g' | tr -s "[:blank:]" "\n" | sort)"
-    printf "%s" "$choices" | menu
+    # Arg:
+    #   $1: a country
+    nordvpn connect "$1" --generate-bash-completion | menu
 }
 
 disconnect() {
     # disconnect
-
     nordvpn disconnect
 }
 
 status() {
     # Echo the status.
-
     local status
     status="$(nordvpn status | tr -d '\r -')"
     if [ -n "${status##*Connected*}" ]; then
@@ -86,7 +78,6 @@ status() {
 
 vpn_status() {
     # Show vpn status.
-
     local choices
     choices="$(nordvpn status | tr -d '\r-' | sed 's/^ *//')"
     printf "%s" "$choices" | menu
@@ -94,7 +85,6 @@ vpn_status() {
 
 settings() {
     # Show vpn settings.
-
     local choices
     choices="$(nordvpn settings | tr -d '\r-' | sed 's/^ *//')"
     printf "%s" "$choices" | menu

@@ -21,7 +21,7 @@ Just git clone this repo and place the `rofi-nordvpn` file somewhere on your `PA
 
 For Arch Linux (and derivatives):
 ```sh
-yay -S rofi-nordvpn-git
+paru -S rofi-nordvpn-git
 ```
 
 # Configuration:

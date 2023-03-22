@@ -18,6 +18,10 @@ echoexit() {
 # Checking dependencies:
 whereis nordvpn >/dev/null || echoexit "'nordvpn' not found."
 
+completion_to_lines() {
+    tr '\t' '\n' | sed '/^[[:space:]]*$/d'
+}
+
 menu() {
     # Menu command, should read from stdin and write to stdout.
 
@@ -50,14 +54,14 @@ connect() {
 
 countries() {
     # Country selection.
-    nordvpn connect --generate-bash-completion | menu
+    nordvpn connect --generate-bash-completion | completion_to_lines | menu
 }
 
 cities() {
     # City selection.
     # Arg:
     #   $1: a country
-    nordvpn connect "$1" --generate-bash-completion | menu
+    nordvpn connect "$1" --generate-bash-completion | completion_to_lines | menu
 }
 
 disconnect() {

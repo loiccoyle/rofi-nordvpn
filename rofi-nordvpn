@@ -32,7 +32,7 @@ usage() {
     printf "Dynamic menu interface for nordvpn.
 
 Usage:
-  rofi-nordvpn [-h] [-s LABEL]
+  rofi-nordvpn [-h] [-s]
     -h                                 Display this help message.
     -s                                 Display current vpn status, useful for status bars.
 "

@@ -16,7 +16,8 @@ echoexit() {
 }
 
 # Checking dependencies:
-whereis nordvpn >/dev/null || echoexit "'nordvpn' not found."
+type nordvpn >/dev/null || echoexit "'nordvpn' not found."
+type rofi >/dev/null || echoexit "'rofi' not found."
 
 completion_to_lines() {
     tr '\t' '\n' | sed '/^[[:space:]]*$/d'
@@ -24,8 +25,12 @@ completion_to_lines() {
 
 menu() {
     # Menu command, should read from stdin and write to stdout.
+    local stdin
+    local line_count
+    stdin="$(cat)"
+    line_count="$(printf "%s" "$stdin" | wc -l)"
 
-    rofi -dmenu -i -p "Select" -no-custom
+    printf "%s" "$stdin" | rofi -dmenu -i -p "NordVPN" -no-custom -l "$((line_count + 1))"
 }
 
 usage() {

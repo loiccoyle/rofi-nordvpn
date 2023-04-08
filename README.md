@@ -1,4 +1,5 @@
 # rofi-nordvpn
+
 <p align="center">
   <img src="https://i.imgur.com/Y5kDbVf.png">
 </p>
@@ -10,39 +11,40 @@
 
 Dynamic menu interface for `nordvpn`.
 
-# Dependencies:
+## Installation
 
- * `rofi`
- * `nordvpn`
+**Dependencies:**
 
-# Installation:
+- `rofi`
+- `nordvpn`
+
+### Manual
 
 Just git clone this repo and place the `rofi-nordvpn` file somewhere on your `PATH` and make sure it is executable `chmod +x rofi-nordvpn`.
 
+### Arch
+
 For Arch Linux (and derivatives):
+
 ```sh
 paru -S rofi-nordvpn-git
 ```
 
-# Configuration:
+## Status bars
 
-There isn't much to configure. If you are not a `rofi` user don't fret you simply need to adjust the `menu` function to use your chosen dynamic menu program.
-
-# Status bars:
-
-For easy embeding into your chosen status bar, consider using the `-s` flag which outputs the current vpn status.
+For easy embedding into your chosen status bar, consider using the `-s` flag which outputs the current vpn status.
 
 ```sh
 $ rofi-nordvpn -s
 Paris
 ```
 
-For polybar here is my module (using the [Siji](https://github.com/stark/siji) font):
+For `polybar`:
 
 ```ini
 [module/vpn]
 type = custom/script
-label =  %output%
+label = 👻 %output%
 exec = rofi-nordvpn -s
 interval = 10
 click-left = rofi-nordvpn &

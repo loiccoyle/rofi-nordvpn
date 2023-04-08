@@ -38,39 +38,34 @@ Usage:
 "
 }
 
+# Initial menu.
 init_menu() {
-    # Initial menu.
     local choices
     choices="connect\ndisconnect\nstatus\nsettings"
     printf "%b" "$choices" | menu
 }
 
+# nordvpn connect menu.
 connect() {
-    # nordvpn connect options.
     local choices
     choices="default\ncountries\ncities\np2p\nonion"
     printf "%b" "$choices" | menu
 }
 
+# Country selection menu.
 countries() {
-    # Country selection.
     nordvpn connect --generate-bash-completion | completion_to_lines | menu
 }
 
+# City selection menu.
+# Arg:
+#   $1: a country
 cities() {
-    # City selection.
-    # Arg:
-    #   $1: a country
     nordvpn connect "$1" --generate-bash-completion | completion_to_lines | menu
 }
 
-disconnect() {
-    # disconnect
-    nordvpn disconnect
-}
-
+# Print the vpn status, for status bars.
 status() {
-    # Echo the status.
     local status
     status="$(nordvpn status | tr -d '\r -')"
     if [ -n "${status##*Connected*}" ]; then
@@ -80,15 +75,15 @@ status() {
     fi
 }
 
+# Show vpn status menu.
 vpn_status() {
-    # Show vpn status.
     local choices
     choices="$(nordvpn status | tr -d '\r-' | sed 's/^ *//')"
     printf "%s" "$choices" | menu
 }
 
+# Show vpn settings.
 settings() {
-    # Show vpn settings.
     local choices
     choices="$(nordvpn settings | tr -d '\r-' | sed 's/^ *//')"
     printf "%s" "$choices" | menu
@@ -139,7 +134,7 @@ case "$(init_menu)" in
     esac
     ;;
 "disconnect")
-    disconnect
+    nordvpn disconnect
     ;;
 "status")
     vpn_status

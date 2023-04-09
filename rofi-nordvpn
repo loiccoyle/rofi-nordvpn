@@ -30,7 +30,11 @@ menu() {
     stdin="$(cat)"
     line_count="$(printf "%s" "$stdin" | wc -l)"
 
-    printf "%s" "$stdin" | rofi -dmenu -i -p "NordVPN" -no-custom -l "$((line_count + 1))"
+    if [ "$line_count" -lt 5 ]; then
+        printf "%s" "$stdin" | sort | rofi -dmenu -i -p "NordVPN" -no-custom -l "$((line_count + 1))"
+    else
+        printf "%s" "$stdin" | sort | rofi -dmenu -i -p "NordVPN" -no-custom
+    fi
 }
 
 usage() {

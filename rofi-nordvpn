@@ -20,7 +20,7 @@ type nordvpn >/dev/null || echoexit "'nordvpn' not found."
 type rofi >/dev/null || echoexit "'rofi' not found."
 
 completion_to_lines() {
-    tr '\t' '\n' | sed '/^[[:space:]]*$/d'
+    tr '\r\b\t' '\n' | sed '/^[[:space:]]*$/d'
 }
 
 menu() {
@@ -63,14 +63,15 @@ connect() {
 
 # Country selection menu.
 countries() {
-    nordvpn connect --generate-bash-completion | completion_to_lines | menu
+    # script needed to avoid it crashing when called from status bar (https://github.com/loiccoyle/rofi-nordvpn/issues/1)
+    script -q -c "nordvpn connect --generate-bash-completion" /dev/null | completion_to_lines | menu
 }
 
 # City selection menu.
 # Arg:
 #   $1: a country
 cities() {
-    nordvpn connect "$1" --generate-bash-completion | completion_to_lines | menu
+    script -q -c "nordvpn connect $1 --generate-bash-completion" /dev/null | completion_to_lines | menu
 }
 
 # Print the vpn status, for status bars.
